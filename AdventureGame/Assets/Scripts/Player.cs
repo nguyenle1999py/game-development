@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class Player : MonoBehaviour
 {
@@ -9,13 +11,22 @@ public class Player : MonoBehaviour
     Animator animator;
     [SerializeField]  float jumpSpeed = 5;
     [SerializeField] float climpSpeed = 5;
+    [SerializeField] int heath = 5;
+    [SerializeField] Text heathText;
+
+
     [SerializeField] Vector2 deathKick = new Vector2(125,125);
+    bool right = true;
+
+    [SerializeField] GameObject projectile;
 
     float startingGravity;
 
     bool isAlive=true;
 
     Collider2D collider2D;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +35,8 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
         collider2D = GetComponent<Collider2D>();
         startingGravity = rigidbody2D.gravityScale;
+        heathText.text = heath.ToString();
+
     }
 
     // Update is called once per frame
@@ -36,11 +49,15 @@ public class Player : MonoBehaviour
         Jump();
         Climp();
         Die();
+        Shoot();
+        //Debug.Log(animator.GetBool("Shoot"));
     }
-    
+
+  
 
     private void Run()
     {
+            
         float horizontal = Input.GetAxis("Horizontal");
         Vector2 position = new Vector2(horizontal*runSpeed, rigidbody2D.velocity.y);
         rigidbody2D.velocity = position;
@@ -85,6 +102,7 @@ public class Player : MonoBehaviour
         if (hasHorizontalSpeed)
         {
             transform.localScale = new Vector2(Mathf.Sign(rigidbody2D.velocity.x), 1f);
+            right = Mathf.Sign(rigidbody2D.velocity.x) > Mathf.Epsilon;
         }
     }
 
@@ -92,10 +110,39 @@ public class Player : MonoBehaviour
     {
         if (rigidbody2D.IsTouchingLayers(LayerMask.GetMask("Enemy", "Hazards")))
         {
-            isAlive = false;
-            animator.SetBool("Die", true);
-            rigidbody2D.velocity = deathKick;
-            FindObjectOfType<GameSession>().ProcessPlayerDeath();
+            heath--;
+            heathText.text = heath.ToString();
+            if (heath == 0)     
+            {
+                isAlive = false;
+                animator.SetBool("Die", true);
+                rigidbody2D.velocity = deathKick;
+                FindObjectOfType<GameSession>().ProcessPlayerDeath();
+            }
+       
         }
+    }
+
+    private void Shoot()
+    {
+        if (!collider2D.IsTouchingLayers(LayerMask.GetMask("Foreground")) && collider2D.IsTouchingLayers(LayerMask.GetMask("Foreground")))
+        {
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            animator.Play("Shoot", 0, 0);
+            GameObject bullet = Instantiate(projectile, rigidbody2D.position, Quaternion.identity) as GameObject;
+            if (right == true)
+            {
+                bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(1000, 0));
+
+            }
+            else
+                bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(-1000, 0));
+
+        }
+
+
     }
 }

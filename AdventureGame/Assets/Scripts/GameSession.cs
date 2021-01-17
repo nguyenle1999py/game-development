@@ -10,7 +10,7 @@ public class GameSession : MonoBehaviour
     [SerializeField] int playerLives = 3;
     [SerializeField] int score = 0;
 
-    [SerializeField] Text livesText;
+    //[SerializeField] Text livesText;
     [SerializeField] Text scoreText;
 
     // Start is called before the first frame update
@@ -25,7 +25,7 @@ public class GameSession : MonoBehaviour
     }
     void Start()
     {
-        livesText.text = playerLives.ToString();
+       // livesText.text = playerLives.ToString();
         scoreText.text = score.ToString();
     }
 
@@ -49,7 +49,7 @@ public class GameSession : MonoBehaviour
         playerLives--;
         var currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex);
-        livesText.text = playerLives.ToString();
+       // livesText.text = playerLives.ToString();
     }
 
     private void ResetGameSession()

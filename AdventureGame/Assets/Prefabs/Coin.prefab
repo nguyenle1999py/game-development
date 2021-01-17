@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -3523938819690391307}
   m_Layer: 0
   m_Name: Coin
-  m_TagString: Untagged
+  m_TagString: Coin
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -144,6 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coinPickupSFX: {fileID: 8300000, guid: 64851a1e889dc1c4db9c8373d301f709, type: 3}
+  point: 100
 --- !u!82 &-3523938819690391307
 AudioSource:
   m_ObjectHideFlags: 0

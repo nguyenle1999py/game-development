@@ -10,8 +10,11 @@ public class CoinPickup : MonoBehaviour
     // Start is called before the first frame update
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        FindObjectOfType<GameSession>().AddToScore(point);
-        AudioSource.PlayClipAtPoint(coinPickupSFX, Camera.main.transform.position);
-        Destroy(gameObject);
+        if (collision.tag == "Player")
+        {
+            FindObjectOfType<GameSession>().AddToScore(point);
+            AudioSource.PlayClipAtPoint(coinPickupSFX, Camera.main.transform.position);
+            Destroy(gameObject);
+        }
     }
 }
