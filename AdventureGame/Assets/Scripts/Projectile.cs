@@ -6,11 +6,15 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] float lifeTime;
     [SerializeField] GameObject explosion;
+    [SerializeField] AudioClip coinPickupSFX;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        Invoke("DestroyProjectile", lifeTime); 
+
+        AudioSource.PlayClipAtPoint(coinPickupSFX, Camera.main.transform.position);
+
     }
 
 
@@ -22,7 +26,6 @@ public class Projectile : MonoBehaviour
         {
             Debug.Log("Projectile Trigger with " + collision.gameObject);
             GameObject game =  Instantiate(explosion, transform.position, Quaternion.identity);
-            
             Destroy(gameObject);
             
         }

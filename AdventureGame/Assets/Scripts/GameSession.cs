@@ -13,6 +13,9 @@ public class GameSession : MonoBehaviour
     //[SerializeField] Text livesText;
     [SerializeField] Text scoreText;
 
+
+    [SerializeField] Text heathText;
+
     // Start is called before the first frame update
     private void Awake()
     {
@@ -27,6 +30,7 @@ public class GameSession : MonoBehaviour
     {
        // livesText.text = playerLives.ToString();
         scoreText.text = score.ToString();
+        heathText.text = playerLives.ToString();
     }
 
     public void AddToScore(int point)
@@ -49,14 +53,16 @@ public class GameSession : MonoBehaviour
         playerLives--;
         var currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex);
-       // livesText.text = playerLives.ToString();
+        heathText.text = playerLives.ToString();
     }
 
     private void ResetGameSession()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(2);
         Destroy(gameObject);
     }
+
+
 
     // Update is called once per frame
     void Update()

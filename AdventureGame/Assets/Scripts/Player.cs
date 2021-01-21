@@ -12,7 +12,9 @@ public class Player : MonoBehaviour
     [SerializeField]  float jumpSpeed = 5;
     [SerializeField] float climpSpeed = 5;
     [SerializeField] int heath = 5;
-    [SerializeField] Text heathText;
+    [SerializeField] bool isShoot = false;
+
+
 
 
     [SerializeField] Vector2 deathKick = new Vector2(125,125);
@@ -35,7 +37,6 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
         collider2D = GetComponent<Collider2D>();
         startingGravity = rigidbody2D.gravityScale;
-        heathText.text = heath.ToString();
 
     }
 
@@ -51,6 +52,11 @@ public class Player : MonoBehaviour
         Die();
         Shoot();
         //Debug.Log(animator.GetBool("Shoot"));
+    }
+
+    public void SetShoot()
+    {
+        isShoot = true;
     }
 
   
@@ -110,37 +116,46 @@ public class Player : MonoBehaviour
     {
         if (rigidbody2D.IsTouchingLayers(LayerMask.GetMask("Enemy", "Hazards")))
         {
-            heath--;
-            heathText.text = heath.ToString();
-            if (heath == 0)     
-            {
+            rigidbody2D.velocity = deathKick;
+
+     
+                Debug.Log(heath.ToString());
+
                 isAlive = false;
                 animator.SetBool("Die", true);
-                rigidbody2D.velocity = deathKick;
                 FindObjectOfType<GameSession>().ProcessPlayerDeath();
-            }
+          
        
         }
     }
 
+    public void jumpSpeedIncre()
+    {
+        jumpSpeed = jumpSpeed * 2;
+    }
+
+
     private void Shoot()
     {
-        if (!collider2D.IsTouchingLayers(LayerMask.GetMask("Foreground")) && collider2D.IsTouchingLayers(LayerMask.GetMask("Foreground")))
+        if (isShoot)
         {
-            return;
-        }
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            animator.Play("Shoot", 0, 0);
-            GameObject bullet = Instantiate(projectile, rigidbody2D.position, Quaternion.identity) as GameObject;
-            if (right == true)
+            if (!collider2D.IsTouchingLayers(LayerMask.GetMask("Foreground")) && collider2D.IsTouchingLayers(LayerMask.GetMask("Foreground")))
             {
-                bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(1000, 0));
+                return;
+            }
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                animator.Play("Shoot", 0, 0);
+                GameObject bullet = Instantiate(projectile, rigidbody2D.position, Quaternion.identity) as GameObject;
+                if (right == true)
+                {
+                    bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(1000, 0));
+
+                }
+                else
+                    bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(-1000, 0));
 
             }
-            else
-                bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(-1000, 0));
-
         }
 
 
